@@ -22,9 +22,9 @@
 				  	<!-- <div class="panel-body">
 				  	</div> -->
 			    	<ul class="list-group">
-					  <a href="users/add" class="list-group-item">Add User</a>
+					  <a href="users?action=add" class="list-group-item">Add User</a>
 					  <!-- <a href="users/delete" class="list-group-item">Delete User</a> -->
-					  <a href="users/search" class="list-group-item">Search User</a>
+					  <a href="users?action=search" class="list-group-item">Search User</a>
 					</ul>
 				</div>
 			</div>

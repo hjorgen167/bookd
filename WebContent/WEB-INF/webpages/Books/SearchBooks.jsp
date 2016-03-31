@@ -56,7 +56,7 @@
 	        <div class="alert alert-danger col-md-8 col-md-offset-2" role="alert">${messages.error}</div>
 	    </c:when>
 	    <c:otherwise>
-        	<center><h3 id="successMessage"><b>${messages.success}</b></h3></center>
+        	<div class="alert alert-success col-md-8 col-md-offset-2" role="alert">${messages.success}</div>
 			<h1>${messages.title}</h1>
 		    <div style="padding: 10px">
 		    	<table class="table">
@@ -73,7 +73,7 @@
 							<th>Pages</th>
 							<th>Publisher</th>
 							<th>Region</th>
-							<th>Delete Book</th>
+							<th></th>
 			            </tr>
 		            </thead>
 		            <tbody>
@@ -90,7 +90,7 @@
 			                    <td><c:out value="${book.getPages()}" /></td>
 			                    <td><c:out value="${book.getPublisher()}" /></td>
 			                    <td><c:out value="${book.getRegion()}" /></td>
-			                    <td><a href="books?action=delete&asin=<c:out value="${book.getASIN()}"/>">Delete</a></td>
+			                    <td><a class="glyphicon glyphicon-trash" href="books?action=delete&asin=<c:out value="${book.getASIN()}"/>"></a></td>
 			                </tr>
 			            </c:forEach>
 		            </tbody>

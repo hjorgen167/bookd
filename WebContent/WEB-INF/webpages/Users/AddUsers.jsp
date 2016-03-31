@@ -11,53 +11,49 @@
 <title>Find a User</title>
 </head>
 <body>
-	<form action="users?action=search" method="post" class="form-horizontal">
+	<form action="users?action=add" method="post" class="form-horizontal">
 		<fieldset>
 		
 		<!-- Form Name -->
-		<center><h1>Search</h1></center>
+		<legend>Form Name</legend>
 		
 		<!-- Text input-->
 		<div class="form-group">
-		  <div class="col-md-8 col-md-offset-2"  style="display:inline-block">
-		  	<input id="searchParam" name="searchParam" type="text" placeholder="Enter username" class="form-control input-md" required="">
-		  </div>
-		  <div style="display:inline-block">
-		    <button id="submit" name="submit" class="btn btn-info">Search</button>
+		  <label class="col-md-4 control-label" for="userId">User ID</label>  
+		  <div class="col-md-4">
+		  <input id="userId" name="userId" type="text" placeholder="UserId" class="form-control input-md" required="">
+		    
 		  </div>
 		</div>
 		
-		<!-- Multiple criterion (inline) -->
-		<!-- <div class="col-md-8 col-md-offset-2">
-		  <label class="col-md-5 control-label" for="criterion">Search By: </label>
-		  <div class="col-md-6"> 
-		    <label class="radio-inline" for="criterion-0">
-		      <input type="radio" name="criterion" id="criterion-0" value="asin" checked="checked">
-		      ASIN
-		    </label> 
-		    <label class="radio-inline" for="criterion-1">
-		      <input type="radio" name="criterion" id="criterion-1" value="title">
-		      Title
-		    </label> 
-		    <label class="radio-inline" for="criterion-2">
-		      <input type="radio" name="criterion" id="criterion-2" value="publisher">
-		      Publisher
-		    </label>
+		<!-- Text input-->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="username">Username</label>  
+		  <div class="col-md-4">
+		  <input id="username" name="username" type="text" placeholder="Username" class="form-control input-md" required="">
+		    
 		  </div>
-		</div> -->
+		</div>
 		
+		<div class="form-group">
+		  <!-- <label class="col-md-4 control-label" for="rel_date"></label> -->  
+		  <div class="col-md-2 col-md-offset-5">
+			<div>
+			    <button id="submit" name="submit" class="btn btn-info btn-block">Submit</button>
+			</div>	    
+		  </div>
+		</div>
+				
 		</fieldset>
 		</form>
-			
 	<br>
 	
 	<c:choose>
 	    <c:when test="${empty users}">
-	        <div class="alert alert-danger col-md-8 col-md-offset-2" role="alert">${messages.title} ${messages.error}</div>
+	        <div class="alert alert-danger col-md-8 col-md-offset-2" role="alert">${messages.error}</div>
 	    </c:when>
 	    <c:otherwise>
-	    	<div class="alert alert-success col-md-8 col-md-offset-2" role="alert">${messages.success}</div>
-        	<%-- <center><h3 id="successMessage"><b>${messages.success}</b></h3></center> --%>
+        	<center><h3 id="successMessage"><b>${messages.success}</b></h3></center>
 			<h1>${messages.title}</h1>
 		    <div class="col-md-6 col-md-offset-3">
 		    	<table class="table">
