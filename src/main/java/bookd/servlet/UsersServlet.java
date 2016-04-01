@@ -33,9 +33,9 @@ public class UsersServlet extends HttpServlet {
 	private String getRedirectURL(String action){
 		String page = "";
 		
-		if(action.equalsIgnoreCase("search") || action.equalsIgnoreCase("delete")){
+		if(action.equalsIgnoreCase("search")){
 			page = "SearchUsers.jsp";
-		}else if(action.equalsIgnoreCase("add")){
+		}else if(action.equalsIgnoreCase("add") || action.equalsIgnoreCase("delete")){
 			page = "AddUsers.jsp";
 		}else{
 			page = "index.jsp";
@@ -81,7 +81,7 @@ public class UsersServlet extends HttpServlet {
 				);
 		try {
 			List<Users> users = new ArrayList<Users>();
-			user = usersDao.create(user);
+			user = usersDao.createOrUpdate(user);
 			users.add(user);
 			req.setAttribute("users", users);
 			messages.put("success", "Displaying results for:  " + user.getName());

@@ -34,29 +34,61 @@ public class BooksDao {
 	}
 
 
-	public Books create(Books book) throws SQLException {
+	public Books createOrUpdate(Books book) throws SQLException {
+		String selectBook = "SELECT * FROM Books WHERE Books.asin = ?";
+		String updateBook = "UPDATE Books SET "
+				+ "model = ?,"
+				+ "title = ?,"
+				+ "binding = ?,"
+				+ "editorial_review = ?,"
+				+ "editorial_reviews = ?,"
+				+ "pages = ?,"
+				+ "publisher = ?,"
+				+ "publication_date = ?,"
+				+ "release_date = ?,"
+				+ "region = ?"
+				+ "WHERE asin = ?";
 		String insertBook = "INSERT INTO Books(asin,model,title,binding,"
 				+ "editorial_review,editorial_reviews,pages,publisher,publication_date,"
 				+ "release_date,region) "
 								+  "VALUES(?,?,?,?,?,?,?,?,?,?,?);";
 		Connection connection = null;
-		PreparedStatement insertStmt = null;
+		PreparedStatement stmt = null;
 		try {
 			connection = connectionManager.getConnection();
-			insertStmt = connection.prepareStatement(insertBook);
-			insertStmt.setString(1, book.getASIN());
-			insertStmt.setString(2, book.getModel());
-			insertStmt.setString(3, book.getTitle());
-			insertStmt.setString(4, book.getBinding());
-			insertStmt.setString(5, book.getEditorialReview());
-			insertStmt.setString(6, book.getEditorialReviews());
-			insertStmt.setInt(7, book.getPages());
-			insertStmt.setString(8, book.getPublisher());
-			insertStmt.setDate(9, new Date(book.getPublicationDate().getTime()));
-			insertStmt.setDate(10, new Date(book.getReleaseDate().getTime()));
-			insertStmt.setString(11, book.getRegion());
-			System.out.println(insertStmt.toString());;
-			insertStmt.executeUpdate();
+			stmt = connection.prepareStatement(selectBook);
+			stmt.setString(1, book.getASIN());
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()){
+				stmt = connection.prepareStatement(updateBook);
+				stmt.setString(1, book.getModel());
+				stmt.setString(2, book.getTitle());
+				stmt.setString(3, book.getBinding());
+				stmt.setString(4, book.getEditorialReview());
+				stmt.setString(5, book.getEditorialReviews());
+				stmt.setInt(6, book.getPages());
+				stmt.setString(7, book.getPublisher());
+				stmt.setDate(8, new Date(book.getPublicationDate().getTime()));
+				stmt.setDate(9, new Date(book.getReleaseDate().getTime()));
+				stmt.setString(10, book.getRegion());
+				stmt.setString(11, book.getASIN());
+				stmt.executeUpdate();
+			}else{
+				stmt = connection.prepareStatement(insertBook);
+				stmt.setString(1, book.getASIN());
+				stmt.setString(2, book.getModel());
+				stmt.setString(3, book.getTitle());
+				stmt.setString(4, book.getBinding());
+				stmt.setString(5, book.getEditorialReview());
+				stmt.setString(6, book.getEditorialReviews());
+				stmt.setInt(7, book.getPages());
+				stmt.setString(8, book.getPublisher());
+				stmt.setDate(9, new Date(book.getPublicationDate().getTime()));
+				stmt.setDate(10, new Date(book.getReleaseDate().getTime()));
+				stmt.setString(11, book.getRegion());
+				stmt.executeUpdate();
+			}
 			return book;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -65,8 +97,8 @@ public class BooksDao {
 			if(connection != null) {
 				connection.close();
 			}
-			if(insertStmt != null) {
-				insertStmt.close();
+			if(stmt != null) {
+				stmt.close();
 			}
 		}
 	}

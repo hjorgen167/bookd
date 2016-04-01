@@ -22,7 +22,7 @@
 				  	<!-- <div class="panel-body">
 				  	</div> -->
 			    	<ul class="list-group">
-					  <a href="users?action=add" class="list-group-item">Add User</a>
+					  <a href="users?action=add" class="list-group-item">Add/Update User</a>
 					  <!-- <a href="users/delete" class="list-group-item">Delete User</a> -->
 					  <a href="users?action=search" class="list-group-item">Search User</a>
 					</ul>
@@ -37,7 +37,7 @@
 				  	<!-- <div class="panel-body">
 				  	</div> -->
 			    	<ul class="list-group">
-					  <a href="books?action=add" class="list-group-item">Add Book</a>
+					  <a href="books?action=add" class="list-group-item">Add/Update Book</a>
 					  <!-- <a href="books?action=delete" class="list-group-item">Delete Book</a> -->
 					  <a href="books?action=search" class="list-group-item">Search Book</a>
 					</ul>

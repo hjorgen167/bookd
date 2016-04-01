@@ -29,18 +29,30 @@ public class UsersDao {
 		return instance;
 	}
 	
-	public Users create(Users user) throws SQLException {
-
+	public Users createOrUpdate(Users user) throws SQLException {
+		String selectUser = "SELECT * FROM BookUser WHERE BookUser.UserID = ?;";
+		String updateUSer = "UPDATE BookUser SET BookUser.Name = ? WHERE BookUser.UserID = ?";
 		String insertUser = "INSERT INTO BookUser(UserID,Name)"
 				+ "VALUES(?,?);";
 		Connection connection = null;
-		PreparedStatement insertStmt = null;
+		PreparedStatement stmt = null;
+		connection = connectionManager.getConnection();
 		try {
-			connection = connectionManager.getConnection();
-			insertStmt = connection.prepareStatement(insertUser);
-			insertStmt.setString(1, user.getUserId());
-			insertStmt.setString(2, user.getName());
-			insertStmt.executeUpdate();
+			stmt = connection.prepareStatement(selectUser);
+			stmt.setString(1, user.getUserId());
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()){
+				stmt = connection.prepareStatement(updateUSer);
+				stmt.setString(1, user.getName());
+				stmt.setString(2, user.getUserId());
+				stmt.executeUpdate();
+			}else{
+				stmt = connection.prepareStatement(insertUser);
+				stmt.setString(1, user.getUserId());
+				stmt.setString(2, user.getName());
+				stmt.executeUpdate();
+			}
 			return user;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -49,8 +61,8 @@ public class UsersDao {
 			if(connection != null) {
 				connection.close();
 			}
-			if(insertStmt != null) {
-				insertStmt.close();
+			if(stmt != null) {
+				stmt.close();
 			}
 		}
 	}

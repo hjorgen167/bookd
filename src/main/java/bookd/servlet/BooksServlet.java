@@ -36,9 +36,9 @@ public class BooksServlet extends HttpServlet {
 	private String getRedirectURL(String action){
 		String page = "";
 		
-		if(action.equalsIgnoreCase("search") || action.equalsIgnoreCase("delete")){
+		if(action.equalsIgnoreCase("search")){
 			page = "SearchBooks.jsp";
-		}else if(action.equalsIgnoreCase("add")){
+		}else if(action.equalsIgnoreCase("add") || action.equalsIgnoreCase("delete")){
 			page = "AddBooks.jsp";
 		}else{
 			page = "index.jsp";
@@ -66,31 +66,35 @@ public class BooksServlet extends HttpServlet {
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
         String action = req.getParameter("action");
+        List<Books> books = null;
         
         if(action.equalsIgnoreCase("search")){
-			searchBooks(req, resp, messages);
+			books = searchBooks(req, resp, messages);
 		}else if(action.equalsIgnoreCase("add")){
-			addBooks(req, resp, messages);
+			books = addBooks(req, resp, messages);
 		}
         
+        req.setAttribute("books", books);
         req.getRequestDispatcher(getRedirectURL(action)).forward(req, resp);
     }
 	
-	private void deleteBooks(HttpServletRequest req, HttpServletResponse resp, Map<String, String> messages) throws IOException {
+	private List<Books> deleteBooks(HttpServletRequest req, HttpServletResponse resp, Map<String, String> messages) throws IOException {
 		// TODO Auto-generated method stub
 		String ASIN = req.getParameter("asin");
 		Books book = new Books(ASIN);
+		List<Books> books = null;
 		try{
 			booksDao.delete(book);
-			searchBooks(req, resp, messages);
+			books = searchBooks(req, resp, messages);
 			messages.put("success", "Book deleted successfully");
 		}catch(SQLException e){
 			e.printStackTrace();
 			messages.put("error", "An unexpected error occured while deleting.\nPlease try again. ");
 		}
+		return books;
 	}
 
-	private void addBooks(HttpServletRequest req, HttpServletResponse resp, Map<String, String> messages) throws IOException {
+	private List<Books> addBooks(HttpServletRequest req, HttpServletResponse resp, Map<String, String> messages) throws IOException {
 		// TODO Auto-generated method stub
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String pubDateString = req.getParameter("rel_date");
@@ -127,20 +131,20 @@ public class BooksServlet extends HttpServlet {
 				rel_date,
 				region
 				);
+		List<Books> books = new ArrayList<Books>();
 		try {
-			List<Books> books = new ArrayList<Books>();
-			book = booksDao.create(book);
+			book = booksDao.createOrUpdate(book);
 			books.add(book);
-			req.setAttribute("books", books);
 			messages.put("success", "Displaying results for:  " + book.getASIN());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			messages.put("error", "An unexpected error occured while retrieving results.\nPlease try again. ");
 			e.printStackTrace();
 		}
+		return books;
 	}
 
-	private void searchBooks(HttpServletRequest req, HttpServletResponse resp, Map<String, String> messages) throws IOException{
+	private List<Books> searchBooks(HttpServletRequest req, HttpServletResponse resp, Map<String, String> messages) throws IOException{
 		List<Books> books = new ArrayList<Books>();
 
 		String criterion = req.getParameter("criterion");
@@ -175,6 +179,6 @@ public class BooksServlet extends HttpServlet {
         		messages.put("error", "Invalid ASIN : " + searchParam.toUpperCase());
 			}
         }
-        req.setAttribute("books", books);
+        return books;
 	}
 }
